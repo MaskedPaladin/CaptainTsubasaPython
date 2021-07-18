@@ -54,17 +54,33 @@ class Player:
     
     def update(self, direction):
         if direction == 97:
-            obj = Player(self.skill_list, self.hasball, self.x-1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
-            return obj
+            if self.x > 0:
+                obj = Player(self.skill_list, self.hasball, self.x-1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+                return obj
+            else:
+                obj = Player(self.skill_list, self.hasball, self.x, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+                return obj
         elif direction == 100:
-            obj = Player(self.skill_list, self.hasball, self.x+1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
-            return obj
+            if self.x < 19:
+                obj = Player(self.skill_list, self.hasball, self.x+1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+                return obj
+            else:
+                obj = Player(self.skill_list, self.hasball, self.x, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+                return obj
         elif direction == 115:
-            obj = Player(self.skill_list, self.hasball, self.x, self.y+1, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
-            return obj
+            if self.y < 9:
+                obj = Player(self.skill_list, self.hasball, self.x, self.y+1, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+                return obj
+            else:
+                obj = Player(self.skill_list, self.hasball, self.x, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+                return obj
         elif direction == 119:
-            obj = Player(self.skill_list, self.hasball, self.x, self.y-1, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
-            return obj     
+            if self.y > 0:
+                obj = Player(self.skill_list, self.hasball, self.x, self.y-1, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+                return obj
+            else:
+                obj = Player(self.skill_list, self.hasball, self.x, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+                return obj
         elif direction == 49:
             skill_cost=self.useskill()
             obj = Player(self.skill_list, self.hasball, self.x, self.y, self.number, self.position, self.stamina-skill_cost, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
@@ -72,8 +88,6 @@ class Player:
         else:
             obj = Player(self.skill_list, self.hasball, self.x, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
             return obj
-        
-
 class FMAP:
     def __init__(self, x, y) -> None:
         self.y = y
@@ -112,10 +126,10 @@ fmap = FMAP(20,10)
 while True:
     put = getinput()
     players[0] = players[0].update(put)
-    print(players[0].__dict__)
+    print((players[0].number, players[0].pos, players[0].stamina))
     tmap = fmap.update(players, fmap.y, fmap.x)
     for i in range(1, len(players)):
         players[i] = players[i].cpu_update()
-        print(players[i].__dict__)
+        print((players[i].number, players[i].pos, players[i].stamina))
     fmap.render(tmap)
     time.sleep(0.3)
