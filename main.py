@@ -126,10 +126,10 @@ fmap = FMAP(20,10)
 while True:
     put = getinput()
     players[0] = players[0].update(put)
-    print((players[0].number, players[0].pos, players[0].stamina))
+    print((players[0].hasball, players[0].number, players[0].pos, players[0].stamina))
     tmap = fmap.update(players, fmap.y, fmap.x)
     for i in range(1, len(players)):
         players[i] = players[i].cpu_update()
-        print((players[i].number, players[i].pos, players[i].stamina))
+        print((players[i].hasball, players[i].number, players[i].pos, players[i].stamina))
     fmap.render(tmap)
     time.sleep(0.3)
