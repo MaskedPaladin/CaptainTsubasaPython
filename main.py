@@ -1,8 +1,19 @@
 import random, time, os, sys
 from msvcrt import getch
 
+class Skill:
+    def __init__(self, name, cost, tipo, bonificador, calculo):
+        self.name = name
+        self.cost = cost
+        self.tipo = tipo
+        self.bonificador = bonificador
+        self.calculo = calculo
+
+
 class Player:
-    def __init__(self, x, y, number, position, stamina, passe, dodge, shoot, intercept, entry, block):
+    def __init__(self, skill_list, hasball, x, y, number, position, stamina, passe, dodge, shoot, intercept, entry, block):
+        self.skill_list = skill_list
+        self.hasball = hasball
         self.x = x
         self. y = y
         self.pos = (x, y)
@@ -17,40 +28,48 @@ class Player:
         self.block = block
     def generate(position):
         if position == 'DEF':
-            obj = Player(random.randint(1, 4),random.randint(1, 9), random.randint(0,9), 'DEF', random.randint(100,900), random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100))
+            obj = Player([Skill("Normal", 20, "Remate", 0, ""), Skill("Normal", 20, "Entrada", 0, ""), Skill("Normal", 20, "Bloqueo", 0, ""), Skill("Normal", 20, "Intercepcion", 0, "")], False, random.randint(1, 4),random.randint(1, 9), random.randint(0,9), 'DEF', random.randint(100,900), random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100))
         elif position == 'MF':
-            obj = Player(random.randint(1, 4),random.randint(1, 9), random.randint(0,9), 'MF', random.randint(100,900), random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100))
+            obj = Player([Skill("Normal", 20, "Remate", 0, ""), Skill("Normal", 20, "Entrada", 0, ""), Skill("Normal", 20, "Bloqueo", 0, ""), Skill("Normal", 20, "Intercepcion", 0, "")], False, random.randint(1, 4),random.randint(1, 9), random.randint(0,9), 'MF', random.randint(100,900), random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100))
         elif position == 'FW':
-            obj = Player(random.randint(1, 4),random.randint(1, 9), random.randint(0,9), 'FW', random.randint(100,900), random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100))
+            obj = Player([Skill("Normal", 20, "Remate", 0, ""), Skill("Normal", 20, "Entrada", 0, ""), Skill("Normal", 20, "Bloqueo", 0, ""), Skill("Normal", 20, "Intercepcion", 0, "")], False, random.randint(1, 4),random.randint(1, 9), random.randint(0,9), 'FW', random.randint(100,900), random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100))
         return obj
     def cpu_update(self):
         if self.x == 1:
-            obj = Player(self.x+1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+            obj = Player(self.skill_list, self.hasball, self.x+1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
             return obj
         if self.x==9:
-            obj = Player(self.x-1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+            obj = Player(self.skill_list, self.hasball, self.x-1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
             return obj
         if self.x != 9 or self.x != 1:
-            obj = Player(self.x+1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+            obj = Player(self.skill_list, self.hasball, self.x+1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
             return obj
+    def useskill(self):
+        for i in range(len(self.skill_list)):
+            print(self.skill_list[i].__dict__)
+        input("\nSkill to use: ")
+    
     def update(self, direction):
         if direction == 97:
-            obj = Player(self.x-1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+            obj = Player(self.skill_list, self.hasball, self.x-1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
             return obj
         elif direction == 100:
-            obj = Player(self.x+1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+            obj = Player(self.skill_list, self.hasball, self.x+1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
             return obj
         elif direction == 115:
-            obj = Player(self.x, self.y+1, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+            obj = Player(self.skill_list, self.hasball, self.x, self.y+1, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
             return obj
-            
         elif direction == 119:
-            obj = Player(self.x, self.y-1, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+            obj = Player(self.skill_list, self.hasball, self.x, self.y-1, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
             return obj     
+        elif direction == 49 and self.hasball==True:
+            self.useskill()
+            obj = Player(self.skill_list, self.hasball, self.x, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+            return obj
         else:
-            pass
-        obj = Player(self.x, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
-        return obj
+            obj = Player(self.skill_list, self.hasball, self.x, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
+            return obj
+        
 
 class FMAP:
     def __init__(self, x, y) -> None:
@@ -79,9 +98,13 @@ def getinput():
     elif key == 119:
         print(key)
         return key
+    elif key == 49:
+        print(key)
+        return key
     else:
         pass
 players = [Player.generate('DEF') for i in range(3)]
+players[0].hasball = True
 fmap = FMAP(20,10)
 while True:
     put = getinput()
