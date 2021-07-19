@@ -8,6 +8,9 @@ At the moment pass skill is the only skill that work.
 
 # TODO:
 -CPU IA.
+
 -Goal mechanics.
+
 -Goalkeepers mechanics.
+
 -Control only player that has ball mechanics.
