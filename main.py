@@ -101,36 +101,38 @@ class FMAP:
     def render(self, fmap):
         tmap = '\n'.join(''.join(line) for line in fmap)
         print(tmap)
-def getinput():
-    key = ord(getch())
-    if key == 97:
-        print(key)
-        return key
-    elif key == 100:
-        print(key)
-        return key
-    elif key == 115:
-        print(key)
-        return key
-    elif key == 119:
-        print(key)
-        return key
-    elif key == 49:
-        print(key)
-        return key
-    else:
-        pass
-players = [Player.generate('DEF') for i in range(3)]
-players[0].hasball = True
-fmap = FMAP(20,10)
-while True:
-    put = getinput()
-    players[0] = players[0].update(put)
-    os.system('cls')
-    print((players[0].hasball, players[0].number, players[0].pos, players[0].stamina))
-    tmap = fmap.update(players, fmap.y, fmap.x)
-    for i in range(1, len(players)):
-        players[i] = players[i].cpu_update()
-        print((players[i].hasball, players[i].number, players[i].pos, players[i].stamina))
-    fmap.render(tmap)
-    time.sleep(0.3)
+class InputX:
+    def getinput():
+        key = ord(getch())
+        if key == 97:
+            return key
+        elif key == 100:
+            return key
+        elif key == 115:
+            return key
+        elif key == 119:
+            return key
+        elif key == 49:
+            return key
+        else:
+            pass
+class Game():
+    def main():
+        players = [Player.generate('DEF') for i in range(3)]
+        players[0].hasball = True
+        fmap = FMAP(20,10)
+        inputx = InputX
+        while True:
+            put = inputx.getinput()
+            players[0] = players[0].update(put)
+            os.system('cls')
+            print((players[0].hasball, players[0].number, players[0].pos, players[0].stamina))
+            tmap = fmap.update(players, fmap.y, fmap.x)
+            for i in range(1, len(players)):
+                players[i] = players[i].cpu_update()
+                print((players[i].hasball, players[i].number, players[i].pos, players[i].stamina))
+            fmap.render(tmap)
+            time.sleep(0.3)
+
+game = Game
+game.main()
