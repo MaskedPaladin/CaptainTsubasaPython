@@ -29,11 +29,11 @@ class Player:
         self.block = block
     def generate(position):
         if position == 'DEF':
-            obj = Player([Skill(False, "Normal", 20, "Remate", 0, ""), Skill(False, "Normal", 20, "Entrada", 0, ""), Skill(False, "Normal", 20, "Bloqueo", 0, ""), Skill(False, "Normal", 20, "Intercepcion", 0, "")], False, random.randint(1, 4),random.randint(1, 9), random.randint(0,9), 'DEF', random.randint(100,900), random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100))
+            obj = Player([Skill(False, "Normal", 20, "Remate", 0, ""), Skill(False, "Normal", 20, "Entrada", 0, ""), Skill(False, "Normal", 20, "Bloqueo", 0, ""), Skill(False, "Normal", 20, "Intercepcion", 0, ""), Skill(False, "Normal", 20, "Pase", 0, "")], False, random.randint(1, 4),random.randint(1, 9), random.randint(0,9), 'DEF', random.randint(100,900), random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100))
         elif position == 'MF':
-            obj = Player([Skill(False, "Normal", 20, "Remate", 0, ""), Skill(False, "Normal", 20, "Entrada", 0, ""), Skill(False, "Normal", 20, "Bloqueo", 0, ""), Skill(False, "Normal", 20, "Intercepcion", 0, "")], False, random.randint(1, 4),random.randint(1, 9), random.randint(0,9), 'MF', random.randint(100,900), random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100))
+            obj = Player([Skill(False, "Normal", 20, "Remate", 0, ""), Skill(False, "Normal", 20, "Entrada", 0, ""), Skill(False, "Normal", 20, "Bloqueo", 0, ""), Skill(False, "Normal", 20, "Intercepcion", 0, ""), Skill(False, "Normal", 20, "Pase", 0, "")], False, random.randint(1, 4),random.randint(1, 9), random.randint(0,9), 'MF', random.randint(100,900), random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100))
         elif position == 'FW':
-            obj = Player([Skill(False, "Normal", 20, "Remate", 0, ""), Skill(False, "Normal", 20, "Entrada", 0, ""), Skill(False, "Normal", 20, "Bloqueo", 0, ""), Skill(False,"Normal", 20, "Intercepcion", 0, "")], False, random.randint(1, 4),random.randint(1, 9), random.randint(0,9), 'FW', random.randint(100,900), random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100))
+            obj = Player([Skill(False, "Normal", 20, "Remate", 0, ""), Skill(False, "Normal", 20, "Entrada", 0, ""), Skill(False, "Normal", 20, "Bloqueo", 0, ""), Skill(False,"Normal", 20, "Intercepcion", 0, ""), Skill(False, "Normal", 20, "Pase", 0, "")], False, random.randint(1, 4),random.randint(1, 9), random.randint(0,9), 'FW', random.randint(100,900), random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100),random.randint(1,100))
         return obj
     def cpu_update(self):
         if self.x == 1:
@@ -45,14 +45,20 @@ class Player:
         if self.x != 9 or self.x != 1:
             obj = Player(self.skill_list, self.hasball, self.x+1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
             return obj
-    def useskill(self):
+    def useskill(self, entities):
         for i in range(len(self.skill_list)):
             self.skill_list[i].number=i
             print(self.skill_list[i].__dict__)
         entry = int(input("\nSkill to use: "))
+        if self.skill_list[entry].tipo=="Pase":
+            for i in range(len(entities)):
+                print((i, entities[i].hasball, entities[i].number, entities[i].pos, entities[i].stamina))
+            entry = int(input("\nTo pass: "))
+            entities[0].hasball=False
+            entities[i].hasball=True
         return self.skill_list[entry].cost
     
-    def update(self, direction):
+    def update(self, direction, entities):
         if direction == 97:
             if self.x > 0:
                 obj = Player(self.skill_list, self.hasball, self.x-1, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
@@ -82,7 +88,7 @@ class Player:
                 obj = Player(self.skill_list, self.hasball, self.x, self.y, self.number, self.position, self.stamina, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
                 return obj
         elif direction == 49:
-            skill_cost=self.useskill()
+            skill_cost=self.useskill(entities)
             obj = Player(self.skill_list, self.hasball, self.x, self.y, self.number, self.position, self.stamina-skill_cost, self.passe, self.dodge, self.shoot, self.intercept, self.entry, self.block)
             return obj
         else:
@@ -124,7 +130,7 @@ class Game():
         inputx = InputX
         while True:
             put = inputx.getinput()
-            players[0] = players[0].update(put)
+            players[0] = players[0].update(put, players)
             os.system('cls')
             print((players[0].hasball, players[0].number, players[0].pos, players[0].stamina))
             tmap = fmap.update(players, fmap.y, fmap.x)
